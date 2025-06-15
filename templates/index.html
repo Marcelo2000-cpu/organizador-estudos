@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Organizador de Rotinas de Estudos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 0 20px;
+      background: #f4f4f4;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .user-info {
+      font-size: 0.9em;
+      color: #333;
+    }
+    .logout {
+      text-decoration: none;
+      color: #e53935;
+      font-weight: bold;
+      margin-left: 15px;
+      cursor: pointer;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .tarefa {
+      background: white;
+      padding: 15px;
+      margin-bottom: 12px;
+      border-left: 8px solid #777;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .tarefa.fixada {
+      border-color: #ff9800;
+      background: #fff8e1;
+    }
+    .tarefa.alta {
+      border-color: #e53935;
+    }
+    .tarefa.normal {
+      border-color: #2196f3;
+    }
+    .tarefa.baixa {
+      border-color: #9e9e9e;
+    }
+    .concluida {
+      text-decoration: line-through;
+      color: #999;
+    }
+    .titulo {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-bottom: 6px;
+    }
+    .meta {
+      font-size: 0.9em;
+      color: #555;
+      margin-bottom: 8px;
+    }
+    .descricao {
+      margin-bottom: 8px;
+      white-space: pre-wrap;
+    }
+    .acoes {
+      margin-top: 8px;
+    }
+    .acoes a {
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 3px;
+      margin-right: 10px;
+      font-weight: bold;
+      color: white;
+      background-color: #2196f3;
+      transition: background-color 0.3s ease;
+    }
+    .acoes a.apagar {
+      background-color: #e53935;
+    }
+    .acoes a:hover {
+      opacity: 0.8;
+    }
+    .btn-nova {
+      display: block;
+      width: 140px;
+      margin: 20px auto;
+      padding: 10px 0;
+      background-color: #4caf50;
+      color: white;
+      text-align: center;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .btn-nova:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="user-info">
+      Logado como: <strong>{{ current_user.nome }}</strong>
+      <a href="{{ url_for('logout') }}" class="logout" onclick="return confirm('Deseja sair da conta?')">Sair</a>
+    </div>
+  </header>
+
+  <h1>Organizador de Rotinas de Estudos</h1>
+
+  <a href="{{ url_for('nova') }}" class="btn-nova">+ Nova Tarefa</a>
+
+  {% if tarefas|length == 0 %}
+    <p>Nenhuma tarefa cadastrada.</p>
+  {% else %}
+    {% for tarefa in tarefas %}
+      <div class="tarefa
+        {% if tarefa.fixada %}fixada{% endif %}
+        {{ tarefa.prioridade }}">
+        <div class="titulo {% if tarefa.concluida %}concluida{% endif %}">
+          {{ tarefa.titulo }}
+        </div>
+
+        <div class="meta">
+          Categoria: {{ tarefa.categoria or 'Sem categoria' }} |
+          Prioridade: {{ tarefa.prioridade.capitalize() }} |
+          {% if tarefa.data_hora %}
+            Data/Hora: {{ tarefa.data_hora.strftime('%d/%m/%Y %H:%M') }}
+          {% else %}
+            Data/Hora: Não definida
+          {% endif %}
+        </div>
+
+        {% if tarefa.descricao %}
+          <div class="descricao {% if tarefa.concluida %}concluida{% endif %}">
+            {{ tarefa.descricao }}
+          </div>
+        {% endif %}
+
+        <div class="acoes">
+          {% if not tarefa.concluida %}
+            <a href="{{ url_for('toggle', id=tarefa.id) }}">Concluir</a>
+          {% else %}
+            <a href="{{ url_for('toggle', id=tarefa.id) }}">Desmarcar</a>
+          {% endif %}
+          <a href="{{ url_for('delete', id=tarefa.id) }}" class="apagar" onclick="return confirm('Deseja apagar esta tarefa?')">Apagar</a>
+        </div>
+      </div>
+    {% endfor %}
+  {% endif %}
+</body>
+</html>

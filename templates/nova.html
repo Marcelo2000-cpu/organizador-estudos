@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nova Tarefa - Organizador de Estudos</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; background:#f4f4f4; padding: 20px; }
+    form { background: white; padding: 20px; border-radius: 6px; }
+    label { display: block; margin-top: 10px; font-weight: bold; }
+    input, textarea, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+      box-sizing: border-box;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    button {
+      margin-top: 15px;
+      background: #4caf50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .link {
+      margin-top: 15px;
+      text-align: center;
+    }
+    .flash {
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+    }
+    .flash.error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    .flash.success {
+      background: #d4edda;
+      color: #155724;
+    }
+  </style>
+</head>
+<body>
+  <h1>Nova Tarefa</h1>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, msg in messages %}
+        <div class="flash {{ category }}">{{ msg }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="{{ url_for('nova') }}">
+    <label for="titulo">Título *</label>
+    <input type="text" id="titulo" name="titulo" required autofocus />
+
+    <label for="descricao">Descrição</label>
+    <textarea id="descricao" name="descricao"></textarea>
+
+    <label for="categoria">Categoria</label>
+    <input type="text" id="categoria" name="categoria" placeholder="Ex: Matemática, Redação" />
+
+    <label for="data_hora">Data e Hora do Prazo</label>
+    <input type="datetime-local" id="data_hora" name="data_hora" />
+
+    <label for="prioridade">Prioridade</label>
+    <select id="prioridade" name="prioridade">
+      <option value="baixa">Baixa</option>
+      <option value="normal" selected>Normal</option>
+      <option value="alta">Alta</option>
+    </select>
+
+    <label>
+      <input type="checkbox" name="fixada" /> Fixar tarefa
+    </label>
+
+    <button type="submit">Salvar</button>
+  </form>
+
+  <div class="link">
+    <a href="{{ url_for('index') }}">Voltar para lista de tarefas</a>
+  </div>
+</body>
+</html>

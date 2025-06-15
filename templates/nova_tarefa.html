@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nova Tarefa - Organizador de Estudos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 30px auto;
+      background: #f4f4f4;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+      color: #333;
+    }
+    input[type="text"],
+    input[type="datetime-local"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 8px 10px;
+      margin-top: 6px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+    }
+    textarea {
+      resize: vertical;
+      height: 80px;
+    }
+    .checkbox-group {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+    }
+    .checkbox-group input[type="checkbox"] {
+      margin-right: 8px;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      padding: 12px 18px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    a.voltar {
+      display: inline-block;
+      margin-top: 12px;
+      text-decoration: none;
+      color: #555;
+      font-size: 14px;
+    }
+    a.voltar:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>Nova Tarefa</h1>
+  <form action="{{ url_for('add') }}" method="POST">
+    <label for="titulo">Título</label>
+    <input type="text" id="titulo" name="titulo" required maxlength="100" />
+
+    <label for="descricao">Descrição</label>
+    <textarea id="descricao" name="descricao" placeholder="Detalhes da tarefa (opcional)"></textarea>
+
+    <label for="categoria">Categoria</label>
+    <input type="text" id="categoria" name="categoria" placeholder="Ex: Matemática, Português, etc." />
+
+    <label for="data_hora">Data e Hora</label>
+    <input type="datetime-local" id="data_hora" name="data_hora" />
+
+    <label for="prioridade">Prioridade</label>
+    <select id="prioridade" name="prioridade" required>
+      <option value="baixa">Baixa</option>
+      <option value="normal" selected>Normal</option>
+      <option value="alta">Alta</option>
+    </select>
+
+    <div class="checkbox-group">
+      <input type="checkbox" id="fixada" name="fixada" />
+      <label for="fixada" style="font-weight: normal;">Fixar esta tarefa no topo</label>
+    </div>
+
+    <button type="submit">Salvar Tarefa</button>
+  </form>
+
+  <a href="{{ url_for('index') }}" class="voltar">&larr; Voltar para lista</a>
+</body>
+</html>
